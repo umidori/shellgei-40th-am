@@ -29,6 +29,231 @@
 					### その５
 					#### 講師:USP友の会 鳥海秀一
 				</section>
+				<section data-markdown>
+					#### 講師： 鳥海秀一
+					* USP友の会の古参会員
+					* シェル芸勉強会午前の部をよく担当
+				</section>
+				<section data-markdown>
+					### 前回の振り返り
+				</section>
+				<section data-markdown>
+					### Unicodeとは
+					* 世界中の文字を1つの文字集合に収める目的で作られた文字コード
+					* 同じような目的でISOが企画したISO/IEC 10646と1990年代に合流
+				</section>
+				<section data-markdown>
+					### Unicodeの用語解説
+					* UCS
+						* ISO/IEC 10646が定義する文字コード集合のこと
+						* 4バイトの符号のUCS-4とそのサブセットのUCS-2がある
+					* UTF
+						* UCSで文字に対応付けた符号位置をコンピュータが利用できるバイト列に変換する方式のこと
+				</section>
+				<section data-markdown>
+					### Unicodeの初期の設計原則（一部）
+					* 文字コードはすべて16ビットで表現する
+					* グリフまでは扱わない
+					* 漢字のように異なる言語間で重複している文字は統一する
+					* 動的な合成を可能にする
+					* 既存の文字コードとの間で可逆変換できるようにする
+				</section>
+				<section data-markdown>
+					### 後々出来あがった原則
+					* ダイナミックコンポジションで表現できるものにはプリコンポジションの新たな符号位置は与えない
+				</section>
+				<section data-markdown>
+					### Unicodeのコンポジション
+					* プリコンポジション
+						* 実際に表示される具体的な字形を前もって用意する方式
+					* ダイナミックコンポジション
+						* 実際に表示される具体的な字形を必要になった時点で用意する方式
+				</section>
+				<section data-markdown>
+					### プリコンポジション劣位の理由
+					* 世界の文字の中には、インド系文字やアラビア語系の文字などダイナミックコンポジションを前提とした文字がある
+					* これらの文字はいくつもの文字が結合してひとまとまりの視覚表現を構成する
+					* その視覚表現にプリコンポジションで新たな文字コードを与えるのは事実上不可能
+				</section>
+				<section data-markdown>
+					### 講師の感想
+					* Unicodeにおいて、結合文字列はUnicodeの傍流ではなく本流
+					* Unicodeは、文字コード集合ではなく文字の部品コード集合と考えた方が良い
+				</section>
+				<section data-markdown>
+					## 以上
+				</section>
+				<section data-markdown>
+					### シェルで文字コードに触れてみる
+					### その５
+				</section>
+				<section data-markdown>
+					### 参考文献
+					* ユニコード戦記（電機大出版局）
+					* Fluent Python（オライリー）
+				</section>
+				<section data-markdown>
+					### アジェンダ
+					* Unicodeの基本原則
+					* Unicodeの正規化
+					* Unicode Character Database (UCD)
+					* 結合文字列
+				</section>
+				<section data-markdown>
+					### 講師の感想（続き）
+					* 結合文字列はUnicodeにおいて本質的な要素
+					* 結合文字列の属性を仮に闇とすると世界は闇落ちしたと考えて良い
+					* 馴染みがないため忌避されているが、結合文字列には慣れるしか選択肢がない
+				</section>
+				<section data-markdown>
+					### Unicode規格の文字に対する方針
+					* 符号化文字集合が対象とするのは、世界の言語を書き表した形（表記形）である
+					* 符号化文字集合は、表記形の表現・伝送・交換・処理・蓄積・入力・表示などの《操作》に用いる
+				</section>
+				<section data-markdown>
+					### 方針から得られる結論
+					* Unicodeは１文字というものを規定しない
+				</section>
+				<section data-markdown>
+					### 結合文字列の問題点と解決策
+					* 問題点
+						* 同じ文字が単純なビットの比較では異なる文字と判定される場合がある
+					* 解決策
+						* Unicodeの正規化
+				</section>
+				<section data-markdown>
+					### Unicodeの正規化とは
+					* Unicodeの等価な文字や文字の並びを統一的な内部表現に変換すること
+					* Unicode正規化は等価性と呼ばれるものに基づいて文字を合成・分解する
+					* Unicodeには4種類の正規化形式が存在する
+				</section>
+				<section data-markdown>
+					### Unicodeの等価性とは
+					* Unicodeには以下の2種類の等価性が存在する
+					* 正準等価性
+						* 機能的に等しく視覚的にも識別不可能である文字を識別
+					* 互換等価性
+						* 正準等価より広い概念
+						* 例えば、上付きや下付きの数字は対応する通常の数字と互換等価
+				</section>
+				<section data-markdown>
+					### Unicodeの正規化の種類
+					|名称|説明|
+					|:-|:-|
+					|NFD|文字を正準等価性によって分解する|
+					|NFC|文字を正準等価性によって分解し、再度合成する|
+					|NFKD|文字を互換等価性によって分解する|
+					|NFKC|文字を互換等価性によって分解し、再度合成する|
+				</section>
+				<section data-markdown>
+					### Unicodeの正規化の注意点
+					* 正規化した文字列を元の文字列に戻すことはできない
+					* 正規合成が許される合成済み文字は、Unicode3.1.0までに収録されたものだけ
+					* NFCやNFKCを用いても結合文字列は排除できない
+					* どの正規化においてもCJK互換漢字はCJK統合漢字に変換される
+				</section>
+				<section data-markdown>
+					### CJK互換漢字とは
+					* 本来ならば、Unicodeの統合の基準によりCJK統合漢字へと包括されるはずの文字
+					* 既存の規格との往復変換性を担保するために特別に登録された
+					* 既存規格との往復変換専用に用いるもので、他の用途で用いてはならないとされている
+					* 符号位置は以下の通り
+						* U+F900〜U+FAD9
+						* U+2F800〜U+2FA1D
+				</section>
+				<section data-markdown>
+					### Perlを用いたUnicodeの正規化
+					* NFD
+						* perl -MUnicode::Normalize -C -pe '$\_=NFD$_'
+					* NFC
+						* perl -MUnicode::Normalize -C -pe '$\_=NFC$_'
+					* NFKD
+						* perl -MUnicode::Normalize -C -pe '$\_=NFKD$_'
+					* NFKC
+						* perl -MUnicode::Normalize -C -pe '$\_=NFKC$_'
+				</section>
+				<section data-markdown>
+					### NFD/NFCを試してみる
+					* echo -e '\U00FC\U0304' | perl -MUnicode::Normalize -C -pe '$\_=NFD$_' | iconv -f utf-8 -t utf-32be | xxd -p -u | fold -8
+					* echo -e '\U0075\U0308\U0304' | perl -MUnicode::Normalize -C -pe '$\_=NFC$_' | iconv -f utf-8 -t utf-32be | xxd -p -u | fold -8
+					* echo 'ｱﾘｰｳﾞｪﾃﾞﾙﾁ' | perl -MUnicode::Normalize -C -pe '$\_=NFC$_'
+					* echo '神' | perl -MUnicode::Normalize -C -pe '$\_=NFC$_'
+				</section>
+				<section data-markdown>
+					### NFKD/NFKCを試してみる
+					* echo 'ｱﾘｰｳﾞｪﾃﾞﾙﾁ' | perl -MUnicode::Normalize -C -pe '$\_=NFKD$_'
+					* echo '神' | perl -MUnicode::Normalize -C -pe '$\_=NFKC$_'
+					* echo '①㈱㍿℡Ⅷ' | perl -MUnicode::Normalize -C -pe '$\_=NFKD$_'
+				</section>
+				<section data-markdown>
+					### (補足) Mac OS XとNFD
+					* Max OS XのHFS+ファイルシステムはファイル名をNFDの変種に強制変換する
+					* 上記仕様にはLinus Torvaldsがブチギレている
+					* HFS+で使用するNFDが通常のNFDと違うところは、CJK互換漢字を統合漢字に変換しないこと
+					* Mac OS X に付属するiconvの文字エンコード「UTF-8-MAC」は上記NFDの仕様を実装している
+					* 最新のファイルシステムであるAPFSでは強制変換は行なっていない
+				</section>
+				<section data-markdown>
+					### 休憩
+				</section>
+				<section data-markdown>
+					### Unicode正規化の全てを
+					### 知りたくないですか？
+				</section>
+				<section data-markdown>
+					### 知りたい人はUnicodeコンソーシアム
+					### のホームページに今すぐアクセス
+				</section>
+				<section data-markdown>
+					### NormalizationTest.txtをダウンロード
+					curl -O https:
+					//www.unicode.org/Public/UCD
+					/latest/ucd/NormalizationTest.txt
+				</section>
+				<section data-markdown>
+					### NormalizationTest.txtの構造
+					* セミコロンで区切られた以下の項目で構成される
+						* 第1項目 - 変換元コードポイント
+						* 第2項目 - NFC変換後コードポイント
+						* 第3項目 - NFD変換後コードポイント
+						* 第4項目 - NFKC変換後コードポイント
+						* 第5項目 - NFKD変換後コードポイント
+						* 第6項目 - 第1〜5項目の文字を含んだコメント
+				</section>
+				<section data-markdown>
+					### 時間を取ります
+					### 眺めてみて下さい
+				</section>
+				<section data-markdown>
+					### NamesList.txtをダウンロード
+					curl -O https:
+					//www.unicode.org/Public/UCD
+					/latest/ucd/NamesList.txt
+				</section>
+				<section data-markdown>
+					### NamesList.txtとは
+					* Unicodeのコードポイントとその名称を示すテキストファイル
+					* コードポイントに対するその他の情報も得ることができる
+				</section>
+				<section data-markdown>
+					### NamesList.txtで遊ぼう
+					* コードポイントFEFFに対するコメントを読んでみよう
+					* 非推奨となったクメール文字を探してみよう
+					* キリル数字の結合文字を検索してみよう
+						* egrep 'COMBINING CYRILLIC.*(HUNDRED|MILLIONS)' NamesList.txt | while read c n; do echo -e "\U$c $c $n"; done
+				</section>
+				<section data-markdown>
+					### Unicode Character Databaseについて
+					* NamesList.txtと同じディレクトリにあるUCD.zipには同ディレクトリにあるファイルが全て圧縮されて入っています
+					* ファイルにはUnicodeの有用な情報がぎっしり詰まっています
+					* 各自色々調査してみてください
+				</section>
+				<section data-markdown>
+					### 今回はここまで
+				</section>
+				<section data-markdown>
+					### ご静聴ありがとうございました
+				</section>
 			</div>
 		</div>
 		<script src="lib/js/head.min.js"></script>
